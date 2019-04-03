@@ -1,10 +1,34 @@
 <html>
-  <head>
-    <link href="css/PixelPainter.css" rel="stylesheet" media="screen" />
-  </head>
-  <body>
-    <h1>Pixel Painter</h1>
-    <div id="pixelPainter"></div>
-    <script src="js/PixelPainter.js"></script>
-  </body>
+
+<head>
+  <link href="css/PixelPainter.css" rel="stylesheet" media="screen" />
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+    integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+</head>
+
+<body>
+  <h1>Pixel Painter</h1>
+  <div id="pixelPainter"></div>
+
+  <div id="canvasOption">
+    <div class="dropdown">
+      <button class="dropbtn">Canvas Size</button>
+      <div id="myDropdown" class="dropdown-content">
+        <a href="#" class="canvasSizes">Small (25 x 25)</a>
+        <a href="#" class="canvasSizes">Medium (50 x 50)</a>
+        <a href="#" class="canvasSizes">Large (100 x 100)</a>
+      </div>
+
+    </div>
+  </div>
+  <div id="container1">
+  </div>
+
+  <div id="container2"></div>
+
+
+
+  <script src="js/PixelPainter.js"></script>
+</body>
+
 </html>
