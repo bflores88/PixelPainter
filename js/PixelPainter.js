@@ -195,9 +195,10 @@ createLoadButton.id = 'loadLast';
 createLoadButton.innerHTML = 'Load';
 createLoad.appendChild(createLoadButton);
 
-createLoadButton.addEventListener('click', function(){
+createLoadButton.addEventListener('click', function () {
   pixelCanvas.remove();
-  loadLocalStorage()});
+  loadLocalStorage()
+});
 
 //Palette & canvas container
 const createContainer1 = document.createElement('div');
@@ -324,7 +325,7 @@ function loadLocalStorage() {
   let reload = localStorage.getItem('yourPixelPainterKey');
   let reloadx = localStorage.getItem('canvasx');
   let reloady = localStorage.getItem('canvasy');
- 
+
   //recreate pixel canvas
   createCanvas(reloadx, reloady);
   canvas = document.querySelector('#pixelCanvas');
@@ -359,6 +360,7 @@ imgInputDirections.innerHTML = 'Enter URL and click here for custom image';
 createImgDiv.appendChild(imgInputDirections);
 
 imgInputWords.addEventListener('click', changeCanvasImg);
-function changeCanvasImg(){
+
+function changeCanvasImg() {
   pixelCanvas.style.backgroundImage = "url('" + customImgInput.value + "')";
 }
