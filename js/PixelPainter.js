@@ -1,5 +1,7 @@
 let mouseDown = false;
 let paintbrush = 'white';
+let canvasx = 50;
+let canvasy = 25;
 const originalBorder = 'lightgray';
 
 //Create HTML elements
@@ -55,16 +57,22 @@ const getCanvasSizes = document.getElementsByClassName('canvasSizes');
 getCanvasSizes[0].addEventListener('click', function () {
   pixelCanvas.remove();
   createCanvas(20, 20);
+  canvasx = 20;
+  canvasy = 20;
 })
 
 getCanvasSizes[1].addEventListener('click', function () {
   pixelCanvas.remove();
   createCanvas(50, 25);
+  canvasx = 50;
+  canvasy = 25;
 })
 
 getCanvasSizes[2].addEventListener('click', function () {
   pixelCanvas.remove();
   createCanvas(50, 40);
+  canvasx = 50;
+  canvasy = 40;
 })
 
 //Canvas Nav Bar - fill
@@ -187,7 +195,9 @@ createLoadButton.id = 'loadLast';
 createLoadButton.innerHTML = 'Load';
 createLoad.appendChild(createLoadButton);
 
-createLoadButton.addEventListener('click', loadLocalStorage);
+createLoadButton.addEventListener('click', function(){
+  pixelCanvas.remove();
+  loadLocalStorage()});
 
 //Palette & canvas container
 const createContainer1 = document.createElement('div');
@@ -248,7 +258,7 @@ const createRandomPalette = function (depth, width = depth) {
     for (let x = 0; x < depth; x++) {
       let swatch = document.createElement('div');
       swatch.className = 'swatch';
-      swatch.style.backgroundColor = Math.floor(Math.random() * 16777215).toString(16);
+      swatch.style.backgroundColor = 'rgb(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ')';
       paletteRow.appendChild(swatch);
 
       swatch.addEventListener('click', setPaintbrush);
@@ -297,14 +307,25 @@ let canvas = document.querySelector('#pixelCanvas');
 
 //Save to local storage
 function savePixelCanvas() {
+  canvas = document.querySelector('#pixelCanvas');
+  localStorage.clear();
   let key = 'yourPixelPainterKey';
   let value = canvas.innerHTML;
   localStorage.setItem(key, value);
+  localStorage.setItem('canvasx', canvasx);
+  localStorage.setItem('canvasy', canvasy);
 }
 
 //Load from local storage
 function loadLocalStorage() {
   let reload = localStorage.getItem('yourPixelPainterKey');
+  let reloadx = localStorage.getItem('canvasx');
+  let reloady = localStorage.getItem('canvasy');
+ 
+  //recreate pixel canvas
+  createCanvas(reloadx, reloady);
+  
+  canvas = document.querySelector('#pixelCanvas');
   canvas.innerHTML = reload;
 
   //resets event listeners on canvas pixels
