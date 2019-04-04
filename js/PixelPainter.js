@@ -187,6 +187,7 @@ createLoadButton.id = 'loadLast';
 createLoadButton.innerHTML = 'Load';
 createLoad.appendChild(createLoadButton);
 
+createLoadButton.addEventListener('click', loadLocalStorage);
 
 //Palette & canvas container
 const createContainer1 = document.createElement('div');
@@ -292,10 +293,25 @@ const createCanvas = function (depth, width = depth) {
 //Default canvas onload
 createCanvas(50, 25);
 
+let canvas = document.querySelector('#pixelCanvas');
+
 //Save to local storage
-function savePixelCanvas(){
-  const canvas = document.querySelector('#pixelCanvas');
-  let key = 'yourKey: ' + Math.floor(Math.random()*1000);
+function savePixelCanvas() {
+  let key = 'yourPixelPainterKey';
   let value = canvas.innerHTML;
   localStorage.setItem(key, value);
+}
+
+//Load from local storage
+function loadLocalStorage() {
+  let reload = localStorage.getItem('yourPixelPainterKey');
+  canvas.innerHTML = reload;
+
+  //resets event listeners on canvas pixels
+  const resetPixelEventListeners = document.getElementsByClassName('pixel');
+  for (let i = 0; i < resetPixelEventListeners.length; i++) {
+    resetPixelEventListeners[i].addEventListener('mousedown', setPixelColor);
+    resetPixelEventListeners[i].addEventListener('mouseup', releaseColor);
+    resetPixelEventListeners[i].addEventListener('mouseover', paintColor);
+  }
 }
