@@ -204,6 +204,8 @@ const createContainer1 = document.createElement('div');
 createContainer1.id = 'container1';
 document.body.appendChild(createContainer1);
 
+
+//Paint functions
 let setPaintbrush = function () {
   paintbrush = this.style.backgroundColor;
   floodfill.style.backgroundColor = paintbrush;
@@ -291,6 +293,7 @@ const createCanvas = function (depth, width = depth) {
       pixel.className = 'pixel';
       pixel.dataset.column = x;
       pixel.dataset.row = y;
+      pixel.dataset.fillValue = false;
       pixelRow.appendChild(pixel);
 
       pixel.addEventListener('mousedown', setPixelColor);
@@ -324,7 +327,6 @@ function loadLocalStorage() {
  
   //recreate pixel canvas
   createCanvas(reloadx, reloady);
-  
   canvas = document.querySelector('#pixelCanvas');
   canvas.innerHTML = reload;
 
@@ -335,4 +337,28 @@ function loadLocalStorage() {
     resetPixelEventListeners[i].addEventListener('mouseup', releaseColor);
     resetPixelEventListeners[i].addEventListener('mouseover', paintColor);
   }
+}
+
+//Create input img url
+const createImgDiv = document.createElement('div');
+createImgDiv.id = 'customImgDiv';
+document.body.appendChild(createImgDiv);
+
+const imgInputDiv = document.createElement('div');
+imgInputDiv.id = 'imgInputDiv';
+createImgDiv.appendChild(imgInputDiv);
+
+const createImgInput = document.createElement('input');
+createImgInput.id = 'customImgInput';
+createImgInput.type = 'text';
+imgInputDiv.appendChild(createImgInput);
+
+const imgInputDirections = document.createElement('div');
+imgInputDirections.id = 'imgInputWords';
+imgInputDirections.innerHTML = 'Enter URL and click here for custom image';
+createImgDiv.appendChild(imgInputDirections);
+
+imgInputWords.addEventListener('click', changeCanvasImg);
+function changeCanvasImg(){
+  pixelCanvas.style.backgroundImage = "url('" + customImgInput.value + "')";
 }

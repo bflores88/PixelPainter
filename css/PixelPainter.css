@@ -38,6 +38,23 @@ h1 {
   justify-content: center;
 }
 
+#customImgDiv {
+  width: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 2vw;
+  max-width: 700vw;
+  font-family: 'Just Me Again Down Here', cursive;
+}
+
+#customImgInput {
+  width: 50vw;
+}
+
+
+
 #floodfill {
   min-width: 6vw;
 }
@@ -50,7 +67,6 @@ h1 {
   border: 3px solid black;
   display: flex;
   flex-direction: column;
-  /* background-image: url('https://bit.ly/2WIQ0wU'); */
   background-repeat: no-repeat;
   background-size: cover;
 }
@@ -140,7 +156,6 @@ h1 {
   display: block;
 }
 
-/* Change color of dropdown links on hover */
 .dropdownContent div:hover {
   background-color: #ddd
 }
