@@ -1,10 +1,13 @@
+let mouseDown = false;
+let paintbrush = 'white';
+const originalBorder = 'lightgray';
+
 //Create HTML elements
 
 //Canvas Nav Bar
 const createCanvasNav = document.createElement('div');
 createCanvasNav.id = 'canvasNav';
 document.body.appendChild(createCanvasNav);
-
 
 //Canvas Nav Bar - canvas sizes
 const createCanvasDropdown = document.createElement('div');
@@ -64,6 +67,28 @@ getCanvasSizes[2].addEventListener('click', function () {
   createCanvas(50, 40);
 })
 
+//Canvas Nav Bar - fill
+const createFill = document.createElement('div');
+createFill.className = 'dropdown';
+createFill.id = 'fillDiv';
+createCanvasNav.appendChild(createFill);
+
+const createFillButton = document.createElement('button');
+createFillButton.className = 'dropbtn iconButton';
+createFillButton.id = 'floodfill';
+createFillButton.style.backgroundColor = paintbrush;
+createFill.appendChild(createFillButton);
+
+const fillIcon = document.createElement('i');
+fillIcon.id = 'fillID';
+fillIcon.className = 'fas fa-fill-drip';
+createFillButton.appendChild(fillIcon);
+
+const fillContent = document.createElement('div');
+fillContent.id = 'eraserContent';
+fillContent.innerHTML = '  Fill';
+createFillButton.appendChild(fillContent);
+
 //Canvas Nav Bar - eraser
 const createEraser = document.createElement('div');
 createEraser.className = 'dropdown';
@@ -71,7 +96,7 @@ createEraser.id = 'eraserDiv';
 createCanvasNav.appendChild(createEraser);
 
 const createEraserButton = document.createElement('button');
-createEraserButton.className = 'dropbtn';
+createEraserButton.className = 'dropbtn iconButton';
 createEraserButton.id = 'eraseSingle';
 createEraser.appendChild(createEraserButton);
 
@@ -86,7 +111,10 @@ createEraserContent.innerHTML = '  Erase';
 createEraserButton.appendChild(createEraserContent);
 
 const setEraser = document.getElementById('eraseSingle');
-eraseSingle.addEventListener('click', function(){paintbrush = 'white'})
+eraseSingle.addEventListener('click', function () {
+  paintbrush = 'white';
+  floodfill.style.backgroundColor = 'white';
+})
 
 //Canvas Nav Bar - clear canvas
 const createClear = document.createElement('div');
@@ -112,7 +140,7 @@ const startBlank = function () {
 
 clearAll.addEventListener('click', startBlank);
 
-//Change palette color
+//Canvas Nav Bar - change palette color
 const paletteCreator = document.createElement('div');
 paletteCreator.className = 'dropdown';
 paletteCreator.id = 'paletteGenerator';
@@ -124,38 +152,69 @@ paletteCreatorButton.id = 'paletteGeneratorButton';
 paletteCreatorButton.innerHTML = 'New Palette';
 paletteCreator.appendChild(paletteCreatorButton);
 
+//Canvas Nav Bar - save
+const createSave = document.createElement('div');
+createSave.className = 'dropdown';
+createSave.id = 'saveDiv';
+createCanvasNav.appendChild(createSave);
+
+const createSaveButton = document.createElement('button');
+createSaveButton.className = 'dropbtn iconButton';
+createSaveButton.id = 'saveNow';
+createSave.appendChild(createSaveButton);
+
+const saveIcon = document.createElement('i');
+saveIcon.id = 'saveID';
+saveIcon.className = 'fas fa-save';
+createSaveButton.appendChild(saveIcon);
+
+const createSaveContent = document.createElement('div');
+createSaveContent.id = 'saveContent';
+createSaveContent.innerHTML = 'Save';
+createSaveButton.appendChild(createSaveContent);
+
+saveNow.addEventListener('click', savePixelCanvas);
+
+//Canvas Nav Bar - load
+const createLoad = document.createElement('div');
+createLoad.className = 'dropdown';
+createLoad.id = 'loadButton';
+createCanvasNav.appendChild(createLoad);
+
+const createLoadButton = document.createElement('button');
+createLoadButton.className = 'dropbtn';
+createLoadButton.id = 'loadLast';
+createLoadButton.innerHTML = 'Load';
+createLoad.appendChild(createLoadButton);
+
 
 //Palette & canvas container
 const createContainer1 = document.createElement('div');
 createContainer1.id = 'container1';
 document.body.appendChild(createContainer1);
 
-let paintbrush = '';
-const originalBorder = 'lightgray';
-
 let setPaintbrush = function () {
   paintbrush = this.style.backgroundColor;
+  floodfill.style.backgroundColor = paintbrush;
   return paintbrush;
 }
-
-let mouseDown = false;
 
 const setPixelColor = function () {
   mouseDown = true;
   this.style.backgroundColor = paintbrush;
   this.style.borderColor = originalBorder;
-    if (paintbrush !== 'white'){
-      this.style.borderColor = paintbrush;
-    } 
+  if (paintbrush !== 'white') {
+    this.style.borderColor = paintbrush;
+  }
 }
 
 const paintColor = function () {
   if (mouseDown === true) {
     this.style.backgroundColor = paintbrush;
     this.style.borderColor = originalBorder;
-    if (paintbrush !== 'white'){
+    if (paintbrush !== 'white') {
       this.style.borderColor = paintbrush;
-    } 
+    }
   }
 }
 
@@ -170,6 +229,7 @@ const releaseMouse = function () {
 
 document.body.addEventListener('mouseup', releaseMouse);
 
+//Palette generator
 let colorPalette = document.createElement('div');
 colorPalette.id = 'pixelPalette';
 createContainer1.appendChild(colorPalette);
@@ -195,8 +255,13 @@ const createRandomPalette = function (depth, width = depth) {
   }
 }
 
-//Invoke create palette function
+//Default palette onload
 createRandomPalette(4, 10);
+
+paletteGeneratorButton.addEventListener('click', function () {
+  randomPixelPalette.remove();
+  createRandomPalette(4, 10);
+})
 
 //Create canvas
 const createCanvas = function (depth, width = depth) {
@@ -213,7 +278,8 @@ const createCanvas = function (depth, width = depth) {
     for (let x = 0; x < depth; x++) {
       let pixel = document.createElement('div');
       pixel.className = 'pixel';
-      pixel.id = "x: " + x + ", y: " + y;
+      pixel.dataset.column = x;
+      pixel.dataset.row = y;
       pixelRow.appendChild(pixel);
 
       pixel.addEventListener('mousedown', setPixelColor);
@@ -223,11 +289,13 @@ const createCanvas = function (depth, width = depth) {
   }
 }
 
-//SEE IF CAN INCORPORATE OPTION FOR USER TO CHANGE CANVAS SIZE
+//Default canvas onload
 createCanvas(50, 25);
 
-
-paletteGeneratorButton.addEventListener('click', function(){
-  randomPixelPalette.remove();
-  createRandomPalette(4, 10);
-})
+//Save to local storage
+function savePixelCanvas(){
+  const canvas = document.querySelector('#pixelCanvas');
+  let key = 'yourKey: ' + Math.floor(Math.random()*1000);
+  let value = canvas.innerHTML;
+  localStorage.setItem(key, value);
+}
