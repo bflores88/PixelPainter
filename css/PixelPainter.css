@@ -1,8 +1,8 @@
 body {
   background-color: aliceblue;
-  background-image: url("https://aleciarachel.files.wordpress.com/2013/04/tumblr_minkswqbbm1r50au6o1_12802.jpg");
+  /* background-image: url("https://aleciarachel.files.wordpress.com/2013/04/tumblr_minkswqbbm1r50au6o1_12802.jpg");
   background-repeat: no-repeat;
-  background-size: cover;
+  background-size: cover; */
 }
 
 h1 {
@@ -47,6 +47,7 @@ h1 {
   margin-bottom: 2vw;
   max-width: 700vw;
   font-family: 'Just Me Again Down Here', cursive;
+  font-size: 3vw;
 }
 
 #customImgInput {
@@ -72,6 +73,10 @@ h1 {
 #pixelPalette {
   width: auto;
   margin-right: 2vw;
+}
+
+#randomPixelPalette {
+  margin-top: 1vw;
 }
 
 #saveNow {

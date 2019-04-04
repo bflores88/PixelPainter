@@ -2,6 +2,8 @@ let mouseDown = false;
 let paintbrush = 'white';
 let canvasx = 50;
 let canvasy = 25;
+let pixelx = 4;
+let pixely = 15;
 const originalBorder = 'lightgray';
 
 //Create HTML elements
@@ -59,6 +61,10 @@ getCanvasSizes[0].addEventListener('click', function () {
   createCanvas(20, 20);
   canvasx = 20;
   canvasy = 20;
+  randomPixelPalette.remove();
+  createRandomPalette(4, 12);
+  pixelx = 4;
+  pixely = 12;
 })
 
 getCanvasSizes[1].addEventListener('click', function () {
@@ -66,6 +72,10 @@ getCanvasSizes[1].addEventListener('click', function () {
   createCanvas(50, 25);
   canvasx = 50;
   canvasy = 25;
+  randomPixelPalette.remove();
+  createRandomPalette(4, 15);
+  pixelx = 4;
+  pixely = 15;
 })
 
 getCanvasSizes[2].addEventListener('click', function () {
@@ -73,6 +83,10 @@ getCanvasSizes[2].addEventListener('click', function () {
   createCanvas(50, 40);
   canvasx = 50;
   canvasy = 40;
+  randomPixelPalette.remove();
+  createRandomPalette(3, 25);
+  pixelx = 3;
+  pixely = 25;
 })
 
 //Canvas Nav Bar - fill
@@ -197,6 +211,7 @@ createLoad.appendChild(createLoadButton);
 
 createLoadButton.addEventListener('click', function () {
   pixelCanvas.remove();
+  randomPixelPalette.remove();
   loadLocalStorage()
 });
 
@@ -270,11 +285,11 @@ const createRandomPalette = function (depth, width = depth) {
 }
 
 //Default palette onload
-createRandomPalette(4, 10);
+createRandomPalette(4, 15);
 
 paletteGeneratorButton.addEventListener('click', function () {
   randomPixelPalette.remove();
-  createRandomPalette(4, 10);
+  createRandomPalette(pixelx, pixely);
 })
 
 //Create canvas
@@ -309,37 +324,6 @@ createCanvas(50, 25);
 
 let canvas = document.querySelector('#pixelCanvas');
 
-//Save to local storage
-function savePixelCanvas() {
-  canvas = document.querySelector('#pixelCanvas');
-  localStorage.clear();
-  let key = 'yourPixelPainterKey';
-  let value = canvas.innerHTML;
-  localStorage.setItem(key, value);
-  localStorage.setItem('canvasx', canvasx);
-  localStorage.setItem('canvasy', canvasy);
-}
-
-//Load from local storage
-function loadLocalStorage() {
-  let reload = localStorage.getItem('yourPixelPainterKey');
-  let reloadx = localStorage.getItem('canvasx');
-  let reloady = localStorage.getItem('canvasy');
-
-  //recreate pixel canvas
-  createCanvas(reloadx, reloady);
-  canvas = document.querySelector('#pixelCanvas');
-  canvas.innerHTML = reload;
-
-  //resets event listeners on canvas pixels
-  const resetPixelEventListeners = document.getElementsByClassName('pixel');
-  for (let i = 0; i < resetPixelEventListeners.length; i++) {
-    resetPixelEventListeners[i].addEventListener('mousedown', setPixelColor);
-    resetPixelEventListeners[i].addEventListener('mouseup', releaseColor);
-    resetPixelEventListeners[i].addEventListener('mouseover', paintColor);
-  }
-}
-
 //Create input img url
 const createImgDiv = document.createElement('div');
 createImgDiv.id = 'customImgDiv';
@@ -364,3 +348,40 @@ imgInputWords.addEventListener('click', changeCanvasImg);
 function changeCanvasImg() {
   pixelCanvas.style.backgroundImage = "url('" + customImgInput.value + "')";
 }
+
+//Save to local storage
+function savePixelCanvas() {
+  canvas = document.querySelector('#pixelCanvas');
+  localStorage.clear();
+  let key = 'yourPixelPainterKey';
+  let value = canvas.innerHTML;
+  localStorage.setItem(key, value);
+  localStorage.setItem('canvasx', canvasx);
+  localStorage.setItem('canvasy', canvasy);
+  localStorage.setItem('pixelx', pixelx);
+  localStorage.setItem('pixely', pixely);
+}
+
+//Load from local storage
+function loadLocalStorage() {
+  let reload = localStorage.getItem('yourPixelPainterKey');
+  let reloadx = localStorage.getItem('canvasx');
+  let reloady = localStorage.getItem('canvasy');
+  let reloadpx = localStorage.getItem('pixelx');
+  let reloadpy = localStorage.getItem('pixely');
+
+  //recreate pixel canvas
+  createRandomPalette(reloadpx, reloadpy);
+  createCanvas(reloadx, reloady);
+  canvas = document.querySelector('#pixelCanvas');
+  canvas.innerHTML = reload;
+
+  //resets event listeners on canvas pixels
+  const resetPixelEventListeners = document.getElementsByClassName('pixel');
+  for (let i = 0; i < resetPixelEventListeners.length; i++) {
+    resetPixelEventListeners[i].addEventListener('mousedown', setPixelColor);
+    resetPixelEventListeners[i].addEventListener('mouseup', releaseColor);
+    resetPixelEventListeners[i].addEventListener('mouseover', paintColor);
+  }
+}
+
