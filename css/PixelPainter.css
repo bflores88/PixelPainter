@@ -50,6 +50,9 @@ h1 {
   border: 3px solid black;
   display: flex;
   flex-direction: column;
+  /* background-image: url('https://bit.ly/2WIQ0wU'); */
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 #pixelPalette {
