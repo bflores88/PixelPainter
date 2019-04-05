@@ -152,7 +152,6 @@ createClear.appendChild(createClearButton);
 
 const startBlank = function () {
   let collectPixels = document.getElementsByClassName('pixel');
-  console.log(collectPixels);
 
   for (let i = 0; i < collectPixels.length; i++) {
     collectPixels[i].style.backgroundColor = 'transparent';
@@ -249,7 +248,6 @@ const paintColor = function () {
 
 const releaseColor = function () {
   mouseDown = false;
-  console.log(mouseDown);
 }
 
 const releaseMouse = function () {
