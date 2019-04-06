@@ -1,21 +1,24 @@
 body {
-  background-color: aliceblue;
-  /* background-image: url("https://aleciarachel.files.wordpress.com/2013/04/tumblr_minkswqbbm1r50au6o1_12802.jpg");
-  background-repeat: no-repeat;
-  background-size: cover; */
+  background-color: #deecff;
 }
 
 h1 {
   font-family: 'Just Me Again Down Here', cursive;
   font-size: 10vw;
+  letter-spacing: 3px;
   color: #38598b;
-  margin: 1vw;
+  margin-bottom: -5px;
   text-align: center;
   text-shadow:
     -1px -1px 0 lightpink,
     1px -1px 0 lightpink,
     -1px 1px 0 lightpink,
     1px 1px 0 lightpink;
+}
+
+input {
+  border: 1px solid #38598b;
+  height: 3vw;
 }
 
 #eraseSingle {
@@ -25,7 +28,7 @@ h1 {
 #canvasNav {
   display: flex;
   justify-content: space-evenly;
-  margin-bottom: 3vw;
+  margin-bottom: 1.5vw;
   margin-left: 10vw;
   width: 80vw;
 }
@@ -165,4 +168,15 @@ h1 {
 
 .dropdownContent div:hover {
   background-color: #ddd
+}
+
+@media screen and (min-width: 920px) {
+  .dropbtn {
+    font-size: 1.5vw;
+    padding: 10px;
+  }
+
+  h1 {
+    font-size: 8vw;
+  }
 }
