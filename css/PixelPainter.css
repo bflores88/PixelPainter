@@ -83,6 +83,10 @@ h1 {
   min-width: 6.5vw;
 }
 
+#sizeButton {
+  min-width: 11vw;
+}
+
 .iconButton {
   display: flex;
   flex-direction: row;

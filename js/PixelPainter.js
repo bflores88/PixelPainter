@@ -19,9 +19,19 @@ createCanvasDropdown.className = 'dropdown';
 createCanvasNav.appendChild(createCanvasDropdown);
 
 const createCanvasButton = document.createElement('button');
-createCanvasButton.className = 'dropbtn';
-createCanvasButton.innerHTML = 'Canvas Size';
+createCanvasButton.className = 'dropbtn iconButton';
+createCanvasButton.id = 'sizeButton';
 createCanvasDropdown.appendChild(createCanvasButton);
+
+const selectSizeIcon = document.createElement('i');
+selectSizeIcon.id = 'selectSizeID';
+selectSizeIcon.className = 'far fa-caret-square-down';
+createCanvasButton.appendChild(selectSizeIcon);
+
+const sizeContent = document.createElement('div');
+sizeContent.id = 'sizeContent';
+sizeContent.innerHTML = 'Canvas Size';
+createCanvasButton.appendChild(sizeContent);
 
 const createCanvasDropdownDiv = document.createElement('div');
 createCanvasDropdownDiv.id = 'canvasDropdownDiv';
@@ -151,6 +161,8 @@ createClearButton.innerHTML = 'Clear Canvas';
 createClear.appendChild(createClearButton);
 
 const startBlank = function () {
+  pixelCanvas.style.backgroundImage = 'none';
+  
   let collectPixels = document.getElementsByClassName('pixel');
 
   for (let i = 0; i < collectPixels.length; i++) {
