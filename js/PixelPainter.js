@@ -162,7 +162,7 @@ createClear.appendChild(createClearButton);
 
 const startBlank = function () {
   pixelCanvas.style.backgroundImage = 'none';
-  
+
   let collectPixels = document.getElementsByClassName('pixel');
 
   for (let i = 0; i < collectPixels.length; i++) {
@@ -384,8 +384,10 @@ function loadLocalStorage() {
 
   //recreate pixel canvas
   createRandomPalette(reloadpx, reloadpy);
+  pixelx = reloadpx;
+  pixely = reloadpy;
   subContainer1.innerHTML = reload;
-
+  
   //resets event listeners on canvas pixels
   const resetPixelEventListeners = document.getElementsByClassName('pixel');
   for (let i = 0; i < resetPixelEventListeners.length; i++) {
