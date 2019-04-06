@@ -219,7 +219,6 @@ const createContainer1 = document.createElement('div');
 createContainer1.id = 'container1';
 document.body.appendChild(createContainer1);
 
-
 //Paint functions
 let setPaintbrush = function () {
   paintbrush = this.style.backgroundColor;
@@ -290,12 +289,17 @@ paletteGeneratorButton.addEventListener('click', function () {
   createRandomPalette(pixelx, pixely);
 })
 
+//Canvas subcontainer
+const canvasSubcontainer = document.createElement('div');
+canvasSubcontainer.id = 'subContainer1';
+createContainer1.appendChild(canvasSubcontainer);
+
 //Create canvas
 const createCanvas = function (depth, width = depth) {
   const canvas = document.createElement('div');
   canvas.id = 'pixelCanvas';
-  canvas.style.width = (15 * depth) + 'px';
-  createContainer1.appendChild(canvas);
+  canvas.style.width = 'auto';
+  subContainer1.appendChild(canvas);
 
   for (let y = 0; y < width; y++) {
     let pixelRow = document.createElement('div');
@@ -305,6 +309,8 @@ const createCanvas = function (depth, width = depth) {
     for (let x = 0; x < depth; x++) {
       let pixel = document.createElement('div');
       pixel.className = 'pixel';
+      pixel.style.width = '15px';
+      pixel.style.height = '15px';
       pixel.dataset.column = x;
       pixel.dataset.row = y;
       pixel.dataset.fillValue = false;
@@ -349,13 +355,11 @@ function changeCanvasImg() {
 
 //Save to local storage
 function savePixelCanvas() {
-  canvas = document.querySelector('#pixelCanvas');
+  canvas = document.querySelector('#subContainer1');
   localStorage.clear();
   let key = 'yourPixelPainterKey';
   let value = canvas.innerHTML;
   localStorage.setItem(key, value);
-  localStorage.setItem('canvasx', canvasx);
-  localStorage.setItem('canvasy', canvasy);
   localStorage.setItem('pixelx', pixelx);
   localStorage.setItem('pixely', pixely);
 }
@@ -363,16 +367,12 @@ function savePixelCanvas() {
 //Load from local storage
 function loadLocalStorage() {
   let reload = localStorage.getItem('yourPixelPainterKey');
-  let reloadx = localStorage.getItem('canvasx');
-  let reloady = localStorage.getItem('canvasy');
   let reloadpx = localStorage.getItem('pixelx');
   let reloadpy = localStorage.getItem('pixely');
 
   //recreate pixel canvas
   createRandomPalette(reloadpx, reloadpy);
-  createCanvas(reloadx, reloady);
-  canvas = document.querySelector('#pixelCanvas');
-  canvas.innerHTML = reload;
+  subContainer1.innerHTML = reload;
 
   //resets event listeners on canvas pixels
   const resetPixelEventListeners = document.getElementsByClassName('pixel');
