@@ -53,21 +53,22 @@ canvasLarge.className = 'canvasSizes';
 canvasLarge.innerHTML = 'Large';
 createCanvasDropdownDiv.appendChild(canvasLarge);
 
-const showCanvasOptions = function () {
+const showCanvasOptions = function() {
   if (canvasDropdownDiv.style.display === 'block') {
     canvasDropdownDiv.style.display = 'none';
   } else {
     canvasDropdownDiv.style.display = 'block';
   }
-}
+};
 
 const dropDownButton = document.getElementsByClassName('dropBtn');
 dropDownButton[0].addEventListener('click', showCanvasOptions);
 
 const getCanvasSizes = document.getElementsByClassName('canvasSizes');
 
-getCanvasSizes[0].addEventListener('click', function () {
+getCanvasSizes[0].addEventListener('click', function() {
   pixelCanvas.remove();
+  pixelMatrix = [];
   createCanvas(20, 20);
   canvasx = 20;
   canvasy = 20;
@@ -75,10 +76,11 @@ getCanvasSizes[0].addEventListener('click', function () {
   createRandomPalette(4, 12);
   pixelx = 4;
   pixely = 12;
-})
+});
 
-getCanvasSizes[1].addEventListener('click', function () {
+getCanvasSizes[1].addEventListener('click', function() {
   pixelCanvas.remove();
+  pixelMatrix = [];
   createCanvas(50, 25);
   canvasx = 50;
   canvasy = 25;
@@ -86,10 +88,11 @@ getCanvasSizes[1].addEventListener('click', function () {
   createRandomPalette(4, 15);
   pixelx = 4;
   pixely = 15;
-})
+});
 
-getCanvasSizes[2].addEventListener('click', function () {
+getCanvasSizes[2].addEventListener('click', function() {
   pixelCanvas.remove();
+  pixelMatrix = [];
   createCanvas(50, 40);
   canvasx = 50;
   canvasy = 40;
@@ -97,7 +100,7 @@ getCanvasSizes[2].addEventListener('click', function () {
   createRandomPalette(3, 25);
   pixelx = 3;
   pixely = 25;
-})
+});
 
 //Canvas Nav Bar - fill
 const createFill = document.createElement('div');
@@ -143,10 +146,11 @@ createEraserContent.innerHTML = '  Erase';
 createEraserButton.appendChild(createEraserContent);
 
 const setEraser = document.getElementById('eraseSingle');
-eraseSingle.addEventListener('click', function () {
+eraseSingle.addEventListener('click', function() {
+  fillStatus = false;
   paintbrush = 'white';
   floodfill.style.backgroundColor = 'white';
-})
+});
 
 //Canvas Nav Bar - clear canvas
 const createClear = document.createElement('div');
@@ -160,8 +164,9 @@ createClearButton.id = 'clearAll';
 createClearButton.innerHTML = 'Clear Canvas';
 createClear.appendChild(createClearButton);
 
-const startBlank = function () {
+const startBlank = function() {
   pixelCanvas.style.backgroundImage = 'none';
+  fillStatus = false;
 
   let collectPixels = document.getElementsByClassName('pixel');
 
@@ -169,7 +174,7 @@ const startBlank = function () {
     collectPixels[i].style.backgroundColor = 'transparent';
     collectPixels[i].style.borderColor = 'lightgrey';
   }
-}
+};
 
 clearAll.addEventListener('click', startBlank);
 
@@ -220,10 +225,10 @@ createLoadButton.id = 'loadLast';
 createLoadButton.innerHTML = 'Load';
 createLoad.appendChild(createLoadButton);
 
-createLoadButton.addEventListener('click', function () {
+createLoadButton.addEventListener('click', function() {
   pixelCanvas.remove();
   randomPixelPalette.remove();
-  loadLocalStorage()
+  loadLocalStorage();
 });
 
 //Palette & canvas container
@@ -231,23 +236,78 @@ const createContainer1 = document.createElement('div');
 createContainer1.id = 'container1';
 document.body.appendChild(createContainer1);
 
+//Fill actions
+let lastSelected = 'transparent';
+let fillStatus = false;
+
+const changeFillStatus = function() {
+  fillStatus = true;
+};
+
+// const testFill = function() {
+//   if (fillStatus === false) {
+//     return;
+//   }
+//   console.log('test');
+//   console.log('last selected: ', lastSelected);
+//   console.log('this: ', this);
+
+// };
+
+const fill = function(pixel, canvas, pixelWidth, selectedColor, paintThisColor) {
+  if (canvas[pixel].style.backgroundColor !== selectedColor || pixel < 0) {
+    return;
+  }
+  
+  console.log('loop:', pixel);
+  console.log(selectedColor);
+  canvas[pixel].style.backgroundColor = paintThisColor;
+  canvas[pixel].style.borderColor = paintThisColor;
+  let leftPixel = pixel - 1;
+  let rightPixel = pixel + 1;
+  let upPixel = pixel - parseInt(pixelWidth);
+  let downPixel = pixel + parseInt(pixelWidth);
+  console.log('up: ', upPixel);
+  console.log('down: ', downPixel);
+  console.log('left: ', leftPixel);
+  console.log('right: ', rightPixel);
+
+  fill(leftPixel, canvas, pixelWidth, selectedColor, paintThisColor);
+  fill(upPixel, canvas, pixelWidth, selectedColor, paintThisColor);
+  fill(rightPixel, canvas, pixelWidth, selectedColor, paintThisColor);
+  fill(downPixel, canvas, pixelWidth, selectedColor, paintThisColor);
+  
+};
+
+floodfill.addEventListener('click', changeFillStatus);
+
 //Paint functions
-let setPaintbrush = function () {
+let setPaintbrush = function() {
+  fillStatus = false;
   paintbrush = this.style.backgroundColor;
   floodfill.style.backgroundColor = paintbrush;
   return paintbrush;
-}
+};
 
-const setPixelColor = function () {
+const setPixelColor = function() {
+  lastSelected = this.style.backgroundColor;
+
+  if (fillStatus === true) {
+    console.log(pixelMatrix.indexOf(this));
+    let compareWith = lastSelected;
+    let startingPixel = pixelMatrix.indexOf(this);
+    fill(startingPixel, pixelMatrix, canvasx, compareWith, paintbrush);
+  }
+
   mouseDown = true;
   this.style.backgroundColor = paintbrush;
   this.style.borderColor = originalBorder;
   if (paintbrush !== 'white') {
     this.style.borderColor = paintbrush;
   }
-}
+};
 
-const paintColor = function () {
+const paintColor = function() {
   if (mouseDown === true) {
     this.style.backgroundColor = paintbrush;
     this.style.borderColor = originalBorder;
@@ -255,15 +315,15 @@ const paintColor = function () {
       this.style.borderColor = paintbrush;
     }
   }
-}
+};
 
-const releaseColor = function () {
+const releaseColor = function() {
   mouseDown = false;
-}
+};
 
-const releaseMouse = function () {
+const releaseMouse = function() {
   mouseDown = false;
-}
+};
 
 document.body.addEventListener('mouseup', releaseMouse);
 
@@ -272,34 +332,41 @@ let colorPalette = document.createElement('div');
 colorPalette.id = 'pixelPalette';
 createContainer1.appendChild(colorPalette);
 
-const createRandomPalette = function (depth, width = depth) {
+const createRandomPalette = function(depth, width = depth) {
   let newPalette = document.createElement('div');
   newPalette.id = 'randomPixelPalette';
   colorPalette.appendChild(newPalette);
 
   for (let y = 0; y < width; y++) {
     let paletteRow = document.createElement('div');
-    paletteRow.className = 'paletteRow'
+    paletteRow.className = 'paletteRow';
     newPalette.appendChild(paletteRow);
 
     for (let x = 0; x < depth; x++) {
       let swatch = document.createElement('div');
       swatch.className = 'swatch';
-      swatch.style.backgroundColor = 'rgb(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ')';
+      swatch.style.backgroundColor =
+        'rgb(' +
+        Math.floor(Math.random() * 256) +
+        ',' +
+        Math.floor(Math.random() * 256) +
+        ',' +
+        Math.floor(Math.random() * 256) +
+        ')';
       paletteRow.appendChild(swatch);
 
       swatch.addEventListener('click', setPaintbrush);
     }
   }
-}
+};
 
 //Default palette onload
 createRandomPalette(4, 15);
 
-paletteGeneratorButton.addEventListener('click', function () {
+paletteGeneratorButton.addEventListener('click', function() {
   randomPixelPalette.remove();
   createRandomPalette(pixelx, pixely);
-})
+});
 
 //Canvas subcontainer
 const canvasSubcontainer = document.createElement('div');
@@ -307,7 +374,9 @@ canvasSubcontainer.id = 'subContainer1';
 createContainer1.appendChild(canvasSubcontainer);
 
 //Create canvas
-const createCanvas = function (depth, width = depth) {
+let pixelMatrix = [];
+
+const createCanvas = function(depth, width = depth) {
   const canvas = document.createElement('div');
   canvas.id = 'pixelCanvas';
   canvas.style.width = 'auto';
@@ -315,7 +384,7 @@ const createCanvas = function (depth, width = depth) {
 
   for (let y = 0; y < width; y++) {
     let pixelRow = document.createElement('div');
-    pixelRow.className = 'pixelRow'
+    pixelRow.className = 'pixelRow';
     canvas.appendChild(pixelRow);
 
     for (let x = 0; x < depth; x++) {
@@ -325,7 +394,10 @@ const createCanvas = function (depth, width = depth) {
       pixel.style.height = '15px';
       pixel.dataset.column = x;
       pixel.dataset.row = y;
-      pixel.dataset.fillValue = false;
+      pixel.dataset.fillValue = null;
+
+      pixelMatrix.push(pixel);
+
       pixelRow.appendChild(pixel);
 
       pixel.addEventListener('mousedown', setPixelColor);
@@ -333,7 +405,7 @@ const createCanvas = function (depth, width = depth) {
       pixel.addEventListener('mouseover', paintColor);
     }
   }
-}
+};
 
 //Default canvas onload
 createCanvas(50, 25);
@@ -374,6 +446,7 @@ function savePixelCanvas() {
   localStorage.setItem(key, value);
   localStorage.setItem('pixelx', pixelx);
   localStorage.setItem('pixely', pixely);
+  localStorage.setItem('pixelMatrix: ', pixelMatrix);
 }
 
 //Load from local storage
@@ -381,13 +454,15 @@ function loadLocalStorage() {
   let reload = localStorage.getItem('yourPixelPainterKey');
   let reloadpx = localStorage.getItem('pixelx');
   let reloadpy = localStorage.getItem('pixely');
+  let reloadPixelMatrix = localStorage.getItem('pixelMatrix');
 
   //recreate pixel canvas
+  pixelMatrix = reloadPixelMatrix;
   createRandomPalette(reloadpx, reloadpy);
   pixelx = reloadpx;
   pixely = reloadpy;
   subContainer1.innerHTML = reload;
-  
+
   //resets event listeners on canvas pixels
   const resetPixelEventListeners = document.getElementsByClassName('pixel');
   for (let i = 0; i < resetPixelEventListeners.length; i++) {
@@ -396,4 +471,3 @@ function loadLocalStorage() {
     resetPixelEventListeners[i].addEventListener('mouseover', paintColor);
   }
 }
-
