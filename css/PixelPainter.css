@@ -101,8 +101,8 @@ input {
   border-bottom-style: solid;
   border-right-style: solid;
   border-color: lightgray;
-  height: 15px;
-  width: 15px;
+  max-height: 15px;
+  max-width: 15px;
   flex-grow: inherit;
 }
 
